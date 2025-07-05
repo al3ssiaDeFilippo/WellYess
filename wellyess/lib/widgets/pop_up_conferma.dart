@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wellyess/models/accessibilita_model.dart';
+import 'package:wellyess/widgets/tappable_reader.dart';
+import 'package:wellyess/services/flutter_tts.dart';
 
 class PopUpConferma extends StatelessWidget {
   final String message;
@@ -31,32 +33,39 @@ class PopUpConferma extends StatelessWidget {
         side: BorderSide(color: borderColor, width: highContrast ? 3 : 0),
       ),
       contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: (18 * fontSizeFactor).clamp(15.0, 24.0),
-          fontWeight: FontWeight.bold,
-          color: textColor,
+      content: TappableReader(
+        label: message,
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: (18 * fontSizeFactor).clamp(15.0, 24.0),
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
         ),
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            if (onConfirm != null) onConfirm!();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttonBg,
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(16),
-            elevation: 6,
-            side: highContrast
-                ? const BorderSide(color: Colors.yellow, width: 2)
-                : BorderSide.none,
+        TappableReader(
+          label: 'Chiudi conferma',
+          child: ElevatedButton(
+            onPressed: () {
+              TalkbackService.announce(message);
+              Navigator.of(context).pop();
+              if (onConfirm != null) onConfirm!();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: buttonBg,
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(16),
+              elevation: 6,
+              side: highContrast
+                  ? const BorderSide(color: Colors.yellow, width: 2)
+                  : BorderSide.none,
+            ),
+            child: Icon(Icons.close, color: iconColor, size: 28),
           ),
-          child: Icon(Icons.close, color: iconColor, size: 28),
         ),
       ],
     );

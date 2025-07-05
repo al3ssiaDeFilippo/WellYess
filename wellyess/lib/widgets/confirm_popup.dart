@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wellyess/models/accessibilita_model.dart';
+import 'package:wellyess/widgets/tappable_reader.dart';
+import 'package:wellyess/services/flutter_tts.dart';
 
 class ConfirmDialog extends StatelessWidget {
   final String titleText;
@@ -41,60 +43,67 @@ class ConfirmDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(w * 0.05),
         side: BorderSide(color: borderColor, width: highContrast ? 2 : 0),
       ),
-      title: Text(
-        titleText,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: (w * 0.05 * fontSizeFactor).clamp(16.0, 28.0),
-          color: titleColor,
+      title: TappableReader(
+        label: titleText,
+        child: Text(
+          titleText,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: (w * 0.05 * fontSizeFactor).clamp(16.0, 28.0),
+            color: titleColor,
+          ),
         ),
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
-        ElevatedButton(
-          onPressed: onCancel,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: cancelBg,
-            padding: EdgeInsets.symmetric(
-              horizontal: w * 0.07,
-              vertical: h * 0.015,
+        TappableReader(
+          label: cancelButtonText,
+          child: ElevatedButton(
+            onPressed: () {
+              TalkbackService.announce(cancelButtonText);
+              onCancel();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: cancelBg,
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.08,
+                vertical: h * 0.015,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(w * 0.05)),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(w * 0.08),
-            ),
-            foregroundColor: buttonTextColor,
-            elevation: 2,
-          ),
-          child: Text(
-            cancelButtonText,
-            style: TextStyle(
-              fontSize: (w * 0.045 * fontSizeFactor).clamp(14.0, 18.0),
-              color: buttonTextColor,
-              fontWeight: FontWeight.bold,
+            child: Text(
+              cancelButtonText,
+              style: TextStyle(
+                  color: buttonTextColor,
+                  fontSize: (w * 0.045 * fontSizeFactor).clamp(14.0, 24.0),
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: onConfirm,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: confirmBg,
-            padding: EdgeInsets.symmetric(
-              horizontal: w * 0.07,
-              vertical: h * 0.015,
+        TappableReader(
+          label: confirmButtonText,
+          child: ElevatedButton(
+            onPressed: () {
+              TalkbackService.announce(confirmButtonText);
+              onConfirm();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: confirmBg,
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.08,
+                vertical: h * 0.015,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(w * 0.05)),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(w * 0.08),
-            ),
-            foregroundColor: buttonTextColor,
-            elevation: 2,
-          ),
-          child: Text(
-            confirmButtonText,
-            style: TextStyle(
-              fontSize: (w * 0.045 * fontSizeFactor).clamp(14.0, 18.0),
-              color: buttonTextColor,
-              fontWeight: FontWeight.bold,
+            child: Text(
+              confirmButtonText,
+              style: TextStyle(
+                  color: buttonTextColor,
+                  fontSize: (w * 0.045 * fontSizeFactor).clamp(14.0, 24.0),
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),
